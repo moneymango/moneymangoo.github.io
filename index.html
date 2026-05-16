@@ -70,11 +70,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  @keyframes fade-in-down {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
   @keyframes scale-in {
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
@@ -223,15 +218,7 @@
     height: 100%;
     object-fit: cover;
     display: block;
-  }
-
-  .profile-image::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.3) 0%, transparent 50%);
-    pointer-events: none;
-    border-radius: 24px;
+    background-color: #e2e8f0; /* fallback background */
   }
 
   /* Glassmorphic card */
@@ -310,7 +297,7 @@
     margin: 0;
   }
 
-  /* 3D Carousel Section */
+  /* FIXED 3D Carousel Section Architecture */
   .carousel-section {
     width: 100%;
     max-width: 1000px;
@@ -336,55 +323,62 @@
 
   .carousel-container {
     position: relative;
-    overflow: hidden;
     background: var(--glass);
     backdrop-filter: blur(20px) saturate(180%);
     border: 1.5px solid var(--glass-border);
     border-radius: 28px;
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
     perspective: 1200px;
-    min-height: 500px;
-    display: flex;
-    align-items: center;
+    overflow: hidden;
   }
 
   .carousel-wrapper {
     width: 100%;
-    height: 100%;
     position: relative;
-    display: flex;
+    min-height: 450px; /* Fixed collapsing heights */
+    display: block;
   }
 
   .carousel-slide {
-    min-width: 100%;
+    position: absolute;
+    inset: 0;
+    width: 100%;
     height: 100%;
     display: flex;
-    padding: 50px;
+    padding: 40px;
     gap: 40px;
     align-items: center;
     transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     transform-style: preserve-3d;
-    opacity: 0.4;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
   }
 
   .carousel-slide.active {
     opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
     transform: translateX(0) rotateY(0) scale(1);
+    z-index: 2;
   }
 
   .carousel-slide.prev {
     transform: translateX(-100%) rotateY(35deg) translateZ(-200px) scale(0.8);
     opacity: 0;
+    visibility: visible;
   }
 
   .carousel-slide.next {
     transform: translateX(100%) rotateY(-35deg) translateZ(-200px) scale(0.8);
     opacity: 0;
+    visibility: visible;
   }
 
   .slide-image {
     flex: 1;
-    min-height: 350px;
+    height: 100%;
+    max-height: 350px;
     border-radius: 20px;
     background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(124,58,237,0.08));
     display: flex;
@@ -404,24 +398,12 @@
     transform: translateZ(80px);
   }
 
-  .slide-image::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.25) 0%, transparent 50%);
-    pointer-events: none;
-  }
-
   .slide-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 20px;
     transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  .carousel-slide.active .slide-image img {
-    transform: scale(1.03);
   }
 
   .slide-content {
@@ -440,7 +422,6 @@
     font-size: 28px;
     font-weight: 700;
     margin: 0;
-    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
     opacity: 0;
   }
 
@@ -453,7 +434,6 @@
     color: var(--muted);
     font-size: 15px;
     line-height: 1.8;
-    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
     opacity: 0;
   }
 
@@ -478,7 +458,6 @@
     font-weight: 600;
     color: var(--primary);
     backdrop-filter: blur(10px);
-    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
     opacity: 0;
   }
 
@@ -495,6 +474,8 @@
     border-top: 1px solid rgba(255,255,255,0.4);
     border-radius: 0 0 28px 28px;
     gap: 16px;
+    position: relative;
+    z-index: 10;
   }
 
   .carousel-nav {
@@ -573,6 +554,10 @@
       gap: 24px;
     }
 
+    .carousel-wrapper {
+      min-height: 600px;
+    }
+
     .carousel-slide {
       flex-direction: column;
       padding: 32px 20px;
@@ -580,7 +565,8 @@
     }
 
     .slide-image {
-      min-height: 280px;
+      width: 100%;
+      min-height: 240px;
     }
 
     .slide-content h3 {
@@ -612,6 +598,10 @@
       font-size: 28px;
     }
 
+    .carousel-wrapper {
+      min-height: 550px;
+    }
+
     .carousel-slide {
       padding: 20px;
     }
@@ -628,7 +618,6 @@
   <div class="blob b"></div>
 
   <div class="page">
-    <!-- Hero Section with Profile Picture -->
     <section class="hero-section">
       <div class="hero-content">
         <h1>Design-Forward Websites With Premium Craftsmanship</h1>
@@ -641,12 +630,11 @@
 
       <div class="profile-blend">
         <div class="profile-image">
-          <img src="./profile.jpg" alt="Henry Amos">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80" alt="Henry Amos">
         </div>
       </div>
     </section>
 
-    <!-- Services Card -->
     <div class="glass-card" style="width: 100%; max-width: 1000px;">
       <h2>Services I Offer</h2>
       <p>Comprehensive web solutions tailored to your needs</p>
@@ -670,7 +658,6 @@
       </div>
     </div>
 
-    <!-- 3D Carousel Section -->
     <section class="carousel-section">
       <div class="section-header">
         <h2>Featured Projects</h2>
@@ -679,8 +666,7 @@
 
       <div class="carousel-container">
         <div class="carousel-wrapper" id="carouselWrapper">
-          <!-- Slides will be generated by JavaScript -->
-        </div>
+          </div>
 
         <div class="carousel-controls">
           <div class="carousel-nav">
@@ -698,41 +684,41 @@
   </div>
 
   <script>
-    // Carousel Data
+    // Carousel Data - SWAPPED LOCAL PATHS TO STUNNING LIVE IMAGE URLS
     const slides = [
       {
         title: "🍰 Local Bakery Landing",
-        image: "./bakery.jpg",
+        image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80",
         description: "A stunning brochure site for artisan bakeries with integrated ordering system, beautiful product showcase, and mobile-first design.",
         tags: ["E-commerce", "Lead Capture", "Mobile-First"]
       },
       {
         title: "🎨 Artist & Creative Portfolio",
-        image: "./artist.jpg",
+        image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80",
         description: "Image-optimized portfolio showcasing visual work with fast load times, SEO optimization for discoverability, and smooth transitions.",
         tags: ["Portfolio", "Image Gallery", "SEO Optimized"]
       },
       {
         title: "🚀 Startup MVP Landing Page",
-        image: "./startup.jpg",
+        image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80",
         description: "High-converting lead capture landing page with email integration, analytics tracking, and conversion optimization.",
         tags: ["Lead Generation", "Analytics", "Conversion Optimized"]
       },
       {
         title: "☕ Specialty Coffee Shop",
-        image: "./coffee.jpg",
+        image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
         description: "Premium café experience brought online with beautiful imagery, menu showcases, location integration, and reservation systems.",
         tags: ["F&B", "Reservations", "Premium Design"]
       },
       {
         title: "👗 Fashion & Lifestyle Store",
-        image: "./fashion.jpg",
+        image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80",
         description: "Modern e-commerce platform with advanced filtering, product recommendations, and seamless checkout experience.",
         tags: ["E-Commerce", "Shopping Cart", "Responsive"]
       },
       {
         title: "🏂 Winter Sports Marketplace",
-        image: "./winter.png",
+        image: "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=800&q=80",
         description: "Vibrant e-commerce store for winter sports gear with stunning product visuals, category organization, and rich filtering.",
         tags: ["E-Commerce", "Seasonal", "Visual Commerce"]
       }
@@ -769,89 +755,4 @@
               <h3>${slide.title}</h3>
               <p>${slide.description}</p>
               <div class="slide-tags">
-                ${slide.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-              </div>
-            </div>
-          `;
-          this.wrapper.appendChild(slideEl);
-        });
-        this.slides = document.querySelectorAll('.carousel-slide');
-      }
-
-      createDots() {
-        slides.forEach((_, index) => {
-          const dot = document.createElement('div');
-          dot.className = `dot ${index === 0 ? 'active' : ''}`;
-          dot.addEventListener('click', () => this.goToSlide(index));
-          this.dotsContainer.appendChild(dot);
-        });
-        this.dots = document.querySelectorAll('.dot');
-      }
-
-      attachEventListeners() {
-        this.prevBtn.addEventListener('click', () => this.prevSlide());
-        this.nextBtn.addEventListener('click', () => this.nextSlide());
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'ArrowLeft') this.prevSlide();
-          if (e.key === 'ArrowRight') this.nextSlide();
-        });
-      }
-
-      nextSlide() {
-        if (this.isTransitioning) return;
-        this.currentIndex = (this.currentIndex + 1) % slides.length;
-        this.updateCarousel();
-      }
-
-      prevSlide() {
-        if (this.isTransitioning) return;
-        this.currentIndex = (this.currentIndex - 1 + slides.length) % slides.length;
-        this.updateCarousel();
-      }
-
-      goToSlide(index) {
-        if (this.isTransitioning || index === this.currentIndex) return;
-        this.currentIndex = index;
-        this.updateCarousel();
-      }
-
-      updateCarousel() {
-        this.isTransitioning = true;
-
-        this.slides.forEach((slide, index) => {
-          slide.classList.remove('active', 'prev', 'next');
-          if (index === this.currentIndex) {
-            slide.classList.add('active');
-          } else if (index < this.currentIndex) {
-            slide.classList.add('prev');
-          } else {
-            slide.classList.add('next');
-          }
-        });
-
-        this.dots.forEach((dot, index) => {
-          dot.classList.toggle('active', index === this.currentIndex);
-        });
-
-        setTimeout(() => {
-          this.isTransitioning = false;
-        }, 800);
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      new Carousel();
-    });
-
-    // Smooth scroll on scroll animations
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      const blobs = document.querySelectorAll('.blob');
-      blobs.forEach((blob, index) => {
-        const speed = 0.5 + index * 0.1;
-        blob.style.transform = `translateY(${scrollY * speed}px)`;
-      });
-    });
-  </script>
-</body>
-</html>
+                ${slide.tags.map(tag =>
