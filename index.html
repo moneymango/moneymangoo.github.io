@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Henry Amos — Web Developer</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg1: linear-gradient(135deg, #f8fafb 0%, #ffffff 30%, #f5f7fa 100%);
+    --glass: rgba(255,255,255,0.7);
+    --glass-strong: rgba(255,255,255,0.85);
+    --glass-border: rgba(255,255,255,0.8);
+    --muted: #6b7280;
+    --primary: #0ea5e9;
+    --accent: #7c3aed;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; background: var(--bg1); color: #0f172a; }
+
+  body {
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Animated background blobs */
+  .blob {
+    position: fixed;
+    filter: blur(60px) saturate(100%);
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .blob.a {
+    width: 600px;
+    height: 600px;
+    right: -200px;
+    top: -100px;
+    background: radial-gradient(circle at 30% 30%, rgba(14, 165, 233, 0.2) 0%, rgba(124, 58, 237, 0.08) 40%, transparent 70%);
+    animation: float-blob-a 12s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  }
+
+  .blob.b {
+    width: 500px;
+    height: 500px;
+    left: -150px;
+    bottom: -100px;
+    background: radial-gradient(circle at 70% 70%, rgba(14, 165, 233, 0.15) 0%, rgba(124, 58, 237, 0.1) 40%, transparent 70%);
+    animation: float-blob-b 15s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  }
+
+  @keyframes float-blob-a {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -50px) scale(1.08); }
+    66% { transform: translate(-30px, 35px) scale(0.95); }
+  }
+
+  @keyframes float-blob-b {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-40px, 40px) scale(0.95); }
+    66% { transform: translate(30px, -35px) scale(1.08); }
+  }
+
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fade-in-down {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes slide-content-in {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4), 0 20px 50px rgba(14, 165, 233, 0.15); }
+    50% { box-shadow: 0 0 0 15px rgba(14, 165, 233, 0), 0 20px 50px rgba(14, 165, 233, 0.15); }
+  }
+
+  .page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Hero section with profile picture blend */
+  .hero-section {
+    width: 100%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    animation: fade-in-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .hero-content h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #0f172a 0%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+    animation: fade-in-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
+    opacity: 0;
+  }
+
+  .hero-content p {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 24px;
+    animation: fade-in-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+    opacity: 0;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    animation: fade-in-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+    opacity: 0;
+  }
+
+  .btn {
+    padding: 14px 28px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn.primary {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    box-shadow: 0 12px 30px rgba(14, 165, 233, 0.3);
+  }
+
+  .btn.primary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(14, 165, 233, 0.4);
+  }
+
+  .btn.secondary {
+    background: var(--glass);
+    color: #0f172a;
+    border: 1.5px solid var(--glass-border);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .btn.secondary:hover {
+    background: var(--glass-strong);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Profile picture with artistic blend */
+  .profile-blend {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1200px;
+  }
+
+  .profile-image {
+    width: 280px;
+    height: 280px;
+    border-radius: 24px;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1.5px solid var(--glass-border);
+    overflow: hidden;
+    box-shadow: 
+      0 40px 60px rgba(14, 165, 233, 0.25),
+      0 0 40px rgba(124, 58, 237, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    animation: scale-in 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+    opacity: 0;
+    position: relative;
+    z-index: 2;
+    transform-style: preserve-3d;
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .profile-image:hover {
+    transform: translateY(-8px) rotateX(5deg) rotateY(-5deg) scale(1.02);
+    box-shadow: 
+      0 50px 80px rgba(14, 165, 233, 0.35),
+      0 0 60px rgba(124, 58, 237, 0.2);
+  }
+
+  .profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .profile-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.3) 0%, transparent 50%);
+    pointer-events: none;
+    border-radius: 24px;
+  }
+
+  /* Glassmorphic card */
+  .glass-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: fade-in-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+    opacity: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+  }
+
+  .glass-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .glass-card h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+
+  .glass-card p {
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .service-item {
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 14px;
+    padding: 16px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .service-item:hover {
+    background: rgba(255,255,255,0.7);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(14,165,233,0.15);
+  }
+
+  .service-item h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .service-item p {
+    font-size: 13px;
+    margin: 0;
+  }
+
+  /* 3D Carousel Section */
+  .carousel-section {
+    width: 100%;
+    max-width: 1000px;
+    animation: fade-in-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+    opacity: 0;
+  }
+
+  .section-header {
+    margin-bottom: 28px;
+    text-align: center;
+  }
+
+  .section-header h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .section-header p {
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  .carousel-container {
+    position: relative;
+    overflow: hidden;
+    background: var(--glass);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 28px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+    perspective: 1200px;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+  }
+
+  .carousel-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+  }
+
+  .carousel-slide {
+    min-width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 50px;
+    gap: 40px;
+    align-items: center;
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-style: preserve-3d;
+    opacity: 0.4;
+  }
+
+  .carousel-slide.active {
+    opacity: 1;
+    transform: translateX(0) rotateY(0) scale(1);
+  }
+
+  .carousel-slide.prev {
+    transform: translateX(-100%) rotateY(35deg) translateZ(-200px) scale(0.8);
+    opacity: 0;
+  }
+
+  .carousel-slide.next {
+    transform: translateX(100%) rotateY(-35deg) translateZ(-200px) scale(0.8);
+    opacity: 0;
+  }
+
+  .slide-image {
+    flex: 1;
+    min-height: 350px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(124,58,237,0.08));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    transform-style: preserve-3d;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+  }
+
+  .carousel-slide.active .slide-image {
+    box-shadow: 
+      0 50px 100px rgba(14,165,233,0.3),
+      0 0 50px rgba(124,58,237,0.2),
+      inset -2px -2px 10px rgba(255,255,255,0.3);
+    transform: translateZ(80px);
+  }
+
+  .slide-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.25) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .slide-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .carousel-slide.active .slide-image img {
+    transform: scale(1.03);
+  }
+
+  .slide-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transform-style: preserve-3d;
+  }
+
+  .carousel-slide.active .slide-content {
+    transform: translateZ(50px);
+  }
+
+  .slide-content h3 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+    opacity: 0;
+  }
+
+  .carousel-slide.active .slide-content h3 {
+    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+  }
+
+  .slide-content p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.8;
+    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+    opacity: 0;
+  }
+
+  .carousel-slide.active .slide-content p {
+    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+  }
+
+  .slide-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: rgba(14,165,233,0.15);
+    border: 1px solid rgba(14,165,233,0.3);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary);
+    backdrop-filter: blur(10px);
+    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+    opacity: 0;
+  }
+
+  .carousel-slide.active .tag {
+    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+  }
+
+  .carousel-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 30px;
+    background: rgba(255,255,255,0.3);
+    border-top: 1px solid rgba(255,255,255,0.4);
+    border-radius: 0 0 28px 28px;
+    gap: 16px;
+  }
+
+  .carousel-nav {
+    display: flex;
+    gap: 12px;
+  }
+
+  .carousel-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(14,165,233,0.3);
+    background: rgba(14,165,233,0.08);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #0f172a;
+    font-weight: 700;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .carousel-btn:hover {
+    background: rgba(14,165,233,0.2);
+    border-color: rgba(14,165,233,0.5);
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 10px 25px rgba(14,165,233,0.25);
+  }
+
+  .carousel-dots {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(15,23,42,0.2);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: 2px solid transparent;
+  }
+
+  .dot:hover {
+    background: rgba(15,23,42,0.35);
+    transform: scale(1.2);
+  }
+
+  .dot.active {
+    background: var(--primary);
+    width: 28px;
+    border-radius: 4px;
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  footer {
+    width: 100%;
+    max-width: 1000px;
+    text-align: center;
+    padding: 24px;
+    color: var(--muted);
+    font-size: 14px;
+    animation: fade-in-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
+    opacity: 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero-section {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .carousel-slide {
+      flex-direction: column;
+      padding: 32px 20px;
+      gap: 24px;
+    }
+
+    .slide-image {
+      min-height: 280px;
+    }
+
+    .slide-content h3 {
+      font-size: 24px;
+    }
+
+    .carousel-controls {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .carousel-nav {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .carousel-dots {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page {
+      padding: 20px 16px;
+      gap: 24px;
+    }
+
+    .hero-content h1 {
+      font-size: 28px;
+    }
+
+    .carousel-slide {
+      padding: 20px;
+    }
+
+    .profile-image {
+      width: 200px;
+      height: 200px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="blob a"></div>
+  <div class="blob b"></div>
+
+  <div class="page">
+    <!-- Hero Section with Profile Picture -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1>Design-Forward Websites With Premium Craftsmanship</h1>
+        <p>I build fast, mobile-first sites and clean landing pages that help businesses and creators stand out. Every pixel is intentional—focusing on clarity, speed, and that premium aesthetic that converts.</p>
+        <div class="cta-buttons">
+          <button class="btn primary">Get Started</button>
+          <button class="btn secondary">View My Work</button>
+        </div>
+      </div>
+
+      <div class="profile-blend">
+        <div class="profile-image">
+          <img src="./profile.jpg" alt="Henry Amos">
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Card -->
+    <div class="glass-card" style="width: 100%; max-width: 1000px;">
+      <h2>Services I Offer</h2>
+      <p>Comprehensive web solutions tailored to your needs</p>
+      <div class="services-grid">
+        <div class="service-item">
+          <h4>🎨 UI/UX Design</h4>
+          <p>Beautiful, intuitive interfaces</p>
+        </div>
+        <div class="service-item">
+          <h4>⚡ Web Development</h4>
+          <p>Fast, responsive code</p>
+        </div>
+        <div class="service-item">
+          <h4>📱 Mobile Web</h4>
+          <p>Perfect on every device</p>
+        </div>
+        <div class="service-item">
+          <h4>🚀 Performance</h4>
+          <p>Optimized and lightning-fast</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D Carousel Section -->
+    <section class="carousel-section">
+      <div class="section-header">
+        <h2>Featured Projects</h2>
+        <p>Explore a diverse range of beautiful, high-converting sites we build</p>
+      </div>
+
+      <div class="carousel-container">
+        <div class="carousel-wrapper" id="carouselWrapper">
+          <!-- Slides will be generated by JavaScript -->
+        </div>
+
+        <div class="carousel-controls">
+          <div class="carousel-nav">
+            <button class="carousel-btn" id="prevBtn">←</button>
+            <button class="carousel-btn" id="nextBtn">→</button>
+          </div>
+          <div class="carousel-dots" id="dotsContainer"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>© <strong>Henry Amos</strong> 2026 — Jos, Nigeria. Crafting premium digital experiences.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Carousel Data
+    const slides = [
+      {
+        title: "🍰 Local Bakery Landing",
+        image: "./bakery.jpg",
+        description: "A stunning brochure site for artisan bakeries with integrated ordering system, beautiful product showcase, and mobile-first design.",
+        tags: ["E-commerce", "Lead Capture", "Mobile-First"]
+      },
+      {
+        title: "🎨 Artist & Creative Portfolio",
+        image: "./artist.jpg",
+        description: "Image-optimized portfolio showcasing visual work with fast load times, SEO optimization for discoverability, and smooth transitions.",
+        tags: ["Portfolio", "Image Gallery", "SEO Optimized"]
+      },
+      {
+        title: "🚀 Startup MVP Landing Page",
+        image: "./startup.jpg",
+        description: "High-converting lead capture landing page with email integration, analytics tracking, and conversion optimization.",
+        tags: ["Lead Generation", "Analytics", "Conversion Optimized"]
+      },
+      {
+        title: "☕ Specialty Coffee Shop",
+        image: "./coffee.jpg",
+        description: "Premium café experience brought online with beautiful imagery, menu showcases, location integration, and reservation systems.",
+        tags: ["F&B", "Reservations", "Premium Design"]
+      },
+      {
+        title: "👗 Fashion & Lifestyle Store",
+        image: "./fashion.jpg",
+        description: "Modern e-commerce platform with advanced filtering, product recommendations, and seamless checkout experience.",
+        tags: ["E-Commerce", "Shopping Cart", "Responsive"]
+      },
+      {
+        title: "🏂 Winter Sports Marketplace",
+        image: "./winter.png",
+        description: "Vibrant e-commerce store for winter sports gear with stunning product visuals, category organization, and rich filtering.",
+        tags: ["E-Commerce", "Seasonal", "Visual Commerce"]
+      }
+    ];
+
+    class Carousel {
+      constructor() {
+        this.wrapper = document.getElementById('carouselWrapper');
+        this.prevBtn = document.getElementById('prevBtn');
+        this.nextBtn = document.getElementById('nextBtn');
+        this.dotsContainer = document.getElementById('dotsContainer');
+        this.currentIndex = 0;
+        this.isTransitioning = false;
+
+        this.init();
+      }
+
+      init() {
+        this.renderSlides();
+        this.createDots();
+        this.attachEventListeners();
+        this.updateCarousel();
+      }
+
+      renderSlides() {
+        slides.forEach(slide => {
+          const slideEl = document.createElement('div');
+          slideEl.className = 'carousel-slide';
+          slideEl.innerHTML = `
+            <div class="slide-image">
+              <img src="${slide.image}" alt="${slide.title}">
+            </div>
+            <div class="slide-content">
+              <h3>${slide.title}</h3>
+              <p>${slide.description}</p>
+              <div class="slide-tags">
+                ${slide.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+              </div>
+            </div>
+          `;
+          this.wrapper.appendChild(slideEl);
+        });
+        this.slides = document.querySelectorAll('.carousel-slide');
+      }
+
+      createDots() {
+        slides.forEach((_, index) => {
+          const dot = document.createElement('div');
+          dot.className = `dot ${index === 0 ? 'active' : ''}`;
+          dot.addEventListener('click', () => this.goToSlide(index));
+          this.dotsContainer.appendChild(dot);
+        });
+        this.dots = document.querySelectorAll('.dot');
+      }
+
+      attachEventListeners() {
+        this.prevBtn.addEventListener('click', () => this.prevSlide());
+        this.nextBtn.addEventListener('click', () => this.nextSlide());
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') this.prevSlide();
+          if (e.key === 'ArrowRight') this.nextSlide();
+        });
+      }
+
+      nextSlide() {
+        if (this.isTransitioning) return;
+        this.currentIndex = (this.currentIndex + 1) % slides.length;
+        this.updateCarousel();
+      }
+
+      prevSlide() {
+        if (this.isTransitioning) return;
+        this.currentIndex = (this.currentIndex - 1 + slides.length) % slides.length;
+        this.updateCarousel();
+      }
+
+      goToSlide(index) {
+        if (this.isTransitioning || index === this.currentIndex) return;
+        this.currentIndex = index;
+        this.updateCarousel();
+      }
+
+      updateCarousel() {
+        this.isTransitioning = true;
+
+        this.slides.forEach((slide, index) => {
+          slide.classList.remove('active', 'prev', 'next');
+          if (index === this.currentIndex) {
+            slide.classList.add('active');
+          } else if (index < this.currentIndex) {
+            slide.classList.add('prev');
+          } else {
+            slide.classList.add('next');
+          }
+        });
+
+        this.dots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === this.currentIndex);
+        });
+
+        setTimeout(() => {
+          this.isTransitioning = false;
+        }, 800);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      new Carousel();
+    });
+
+    // Smooth scroll on scroll animations
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const blobs = document.querySelectorAll('.blob');
+      blobs.forEach((blob, index) => {
+        const speed = 0.5 + index * 0.1;
+        blob.style.transform = `translateY(${scrollY * speed}px)`;
+      });
+    });
+  </script>
+</body>
+</html>
