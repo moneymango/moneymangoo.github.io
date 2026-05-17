@@ -620,7 +620,7 @@
     <section class="hero-section">
       <div class="hero-content">
         <h1>Design-Forward Websites With Premium Craftsmanship</h1>
-        <p>I build fast, mobile-first sites and clean landing pages that help businesses and creators stand out. Every pixel is intentional—focusing on clarity, speed, and that premium aesthetic that converts.</p>
+        <p>I build fast, mobile-first sites and clean landing pages that help businesses and creators stand out. Every pixel is intentional—focusing on clarity, speed, and that premium aesthetic that makes your brand unforgettable.</p>
         <div class="cta-buttons">
           <button class="btn primary" id="openModalBtn">Get Started</button>
         </div>
@@ -782,4 +782,44 @@
       updateCarousel() {
         this.slides.forEach((slide, index) => {
           slide.classList.remove('active', 'prev', 'next');
-          if (
+          if (index === this.currentIndex) {
+            slide.classList.add('active');
+          } else if (index < this.currentIndex) {
+            slide.classList.add('prev');
+          } else {
+            slide.classList.add('next');
+          }
+        });
+
+        this.dots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === this.currentIndex);
+        });
+      }
+    }
+
+    // Initialize carousel when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      new Carousel();
+
+      // Modal controls
+      const contactModal = document.getElementById('contactModal');
+      const openModalBtn = document.getElementById('openModalBtn');
+      const closeModal = document.getElementById('closeModal');
+
+      openModalBtn.addEventListener('click', () => {
+        contactModal.classList.add('open');
+      });
+
+      closeModal.addEventListener('click', () => {
+        contactModal.classList.remove('open');
+      });
+
+      contactModal.addEventListener('click', (e) => {
+        if (e.target === contactModal) {
+          contactModal.classList.remove('open');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
