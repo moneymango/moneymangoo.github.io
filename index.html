@@ -218,7 +218,7 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    background-color: #e2e8f0; /* fallback background */
+    background-color: #e2e8f0;
   }
 
   /* Glassmorphic card */
@@ -297,7 +297,7 @@
     margin: 0;
   }
 
-  /* FIXED 3D Carousel Section Architecture */
+  /* RE-ENGINEERED CAROUSEL CONTAINER FOR MOBILE FIXED HEIGHT */
   .carousel-section {
     width: 100%;
     max-width: 1000px;
@@ -335,7 +335,7 @@
   .carousel-wrapper {
     width: 100%;
     position: relative;
-    min-height: 450px; /* Fixed collapsing heights */
+    min-height: 480px; /* Forces a safe minimum height baseline on desktop */
     display: block;
   }
 
@@ -377,6 +377,7 @@
 
   .slide-image {
     flex: 1;
+    width: 100%;
     height: 100%;
     max-height: 350px;
     border-radius: 20px;
@@ -547,26 +548,27 @@
     opacity: 0;
   }
 
-  /* Responsive */
+  /* RESPONSIVE LAYOUT BREAKPOINTS */
   @media (max-width: 768px) {
     .hero-section {
       grid-template-columns: 1fr;
-      gap: 24px;
+      gap: 32px;
     }
 
     .carousel-wrapper {
-      min-height: 600px;
+      min-height: 620px; /* Forces enough visual space to avoid absolute container collapsing */
     }
 
     .carousel-slide {
       flex-direction: column;
-      padding: 32px 20px;
-      gap: 24px;
+      padding: 30px 20px;
+      gap: 20px;
     }
 
     .slide-image {
       width: 100%;
-      min-height: 240px;
+      min-height: 250px;
+      max-height: 250px;
     }
 
     .slide-content h3 {
@@ -575,40 +577,44 @@
 
     .carousel-controls {
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
+      padding: 20px;
     }
 
     .carousel-nav {
       width: 100%;
       justify-content: center;
+      order: 2;
     }
 
     .carousel-dots {
       width: 100%;
+      order: 1;
     }
   }
 
   @media (max-width: 480px) {
     .page {
-      padding: 20px 16px;
-      gap: 24px;
+      padding: 24px 16px;
+      gap: 32px;
     }
 
     .hero-content h1 {
-      font-size: 28px;
+      font-size: 30px;
     }
 
     .carousel-wrapper {
-      min-height: 550px;
+      min-height: 580px;
     }
 
-    .carousel-slide {
-      padding: 20px;
+    .slide-image {
+      min-height: 200px;
+      max-height: 200px;
     }
 
     .profile-image {
-      width: 200px;
-      height: 200px;
+      width: 240px;
+      height: 240px;
     }
   }
 </style>
@@ -630,7 +636,7 @@
 
       <div class="profile-blend">
         <div class="profile-image">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80" alt="Henry Amos">
+          <img src="./profile.jpg" alt="Henry Amos">
         </div>
       </div>
     </section>
@@ -684,7 +690,7 @@
   </div>
 
   <script>
-    // Carousel Data - SWAPPED LOCAL PATHS TO STUNNING LIVE IMAGE URLS
+    // Project Carousel Live Data Feeds
     const slides = [
       {
         title: "🍰 Local Bakery Landing",
@@ -755,4 +761,89 @@
               <h3>${slide.title}</h3>
               <p>${slide.description}</p>
               <div class="slide-tags">
-                ${slide.tags.map(tag =>
+                ${slide.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+              </div>
+            </div>
+          `;
+          this.wrapper.appendChild(slideEl);
+        });
+        this.slides = document.querySelectorAll('.carousel-slide');
+      }
+
+      createDots() {
+        slides.forEach((_, index) => {
+          const dot = document.createElement('div');
+          dot.className = `dot ${index === 0 ? 'active' : ''}`;
+          dot.addEventListener('click', () => this.goToSlide(index));
+          this.dotsContainer.appendChild(dot);
+        });
+        this.dots = document.querySelectorAll('.dot');
+      }
+
+      attachEventListeners() {
+        this.prevBtn.addEventListener('click', () => this.prevSlide());
+        this.nextBtn.addEventListener('click', () => this.nextSlide());
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') this.prevSlide();
+          if (e.key === 'ArrowRight') this.nextSlide();
+        });
+      }
+
+      nextSlide() {
+        if (this.isTransitioning) return;
+        this.currentIndex = (this.currentIndex + 1) % slides.length;
+        this.updateCarousel();
+      }
+
+      prevSlide() {
+        if (this.isTransitioning) return;
+        this.currentIndex = (this.currentIndex - 1 + slides.length) % slides.length;
+        this.updateCarousel();
+      }
+
+      goToSlide(index) {
+        if (this.isTransitioning || index === this.currentIndex) return;
+        this.currentIndex = index;
+        this.updateCarousel();
+      }
+
+      updateCarousel() {
+        this.isTransitioning = true;
+
+        this.slides.forEach((slide, index) => {
+          slide.classList.remove('active', 'prev', 'next');
+          if (index === this.currentIndex) {
+            slide.classList.add('active');
+          } else if (index < this.currentIndex) {
+            slide.classList.add('prev');
+          } else {
+            slide.classList.add('next');
+          }
+        });
+
+        this.dots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === this.currentIndex);
+        });
+
+        setTimeout(() => {
+          this.isTransitioning = false;
+        }, 800);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      new Carousel();
+    });
+
+    // Smooth scroll parallax background effect
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const blobs = document.querySelectorAll('.blob');
+      blobs.forEach((blob, index) => {
+        const speed = 0.5 + index * 0.1;
+        blob.style.transform = `translateY(${scrollY * speed}px)`;
+      });
+    });
+  </script>
+</body>
+</html>
