@@ -75,14 +75,24 @@
     to { opacity: 1; transform: scale(1); }
   }
 
-  @keyframes slide-content-in {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
+  @keyframes slide-in-right {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
   }
 
-  @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4), 0 20px 50px rgba(14, 165, 233, 0.15); }
-    50% { box-shadow: 0 0 0 15px rgba(14, 165, 233, 0), 0 20px 50px rgba(14, 165, 233, 0.15); }
+  @keyframes float-up {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(14, 165, 233, 0.5), 0 40px 80px rgba(14, 165, 233, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(124, 58, 237, 0.6), 0 40px 100px rgba(124, 58, 237, 0.4); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
   }
 
   .page {
@@ -177,21 +187,38 @@
     width: 280px;
     height: 280px;
     border-radius: 24px;
-    background: #1e293b;
-    border: 1.5px solid var(--glass-border);
+    background: linear-gradient(135deg, #0ea5e9 0%, #7c3aed 100%);
+    border: 2px solid var(--glass-border);
     overflow: hidden;
     box-shadow: 
-      0 40px 60px rgba(14, 165, 233, 0.25),
-      0 0 40px rgba(124, 58, 237, 0.15);
-    animation: scale-in 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+      0 40px 80px rgba(14, 165, 233, 0.4),
+      0 0 60px rgba(124, 58, 237, 0.3),
+      inset 0 1px 0 rgba(255,255,255,0.4);
+    animation: scale-in 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards, glow-pulse 4s ease-in-out infinite 2s;
     opacity: 0;
     position: relative;
     z-index: 2;
     transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
+  .profile-image::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    animation: float-up 3s ease-in-out infinite;
+    z-index: 1;
+  }
+
   .profile-image:hover {
-    transform: translateY(-8px) scale(1.02);
+    transform: translateY(-8px) scale(1.05) rotateX(5deg);
+    box-shadow: 
+      0 50px 100px rgba(14, 165, 233, 0.5),
+      0 0 80px rgba(124, 58, 237, 0.4),
+      inset 0 1px 0 rgba(255,255,255,0.5);
   }
 
   .profile-image img {
@@ -199,6 +226,20 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    position: relative;
+    z-index: 2;
+  }
+
+  .profile-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(14, 165, 233, 0.2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    position: relative;
+    z-index: 2;
   }
 
   /* Glassmorphic card layouts */
@@ -216,10 +257,21 @@
     overflow: hidden;
   }
 
+  .glass-card:hover {
+    backdrop-filter: blur(30px) saturate(200%);
+    border-color: rgba(14, 165, 233, 0.4);
+    box-shadow: 0 20px 60px rgba(14, 165, 233, 0.15);
+    transform: translateY(-4px);
+  }
+
   .glass-card h2 {
     font-size: 24px;
     margin-bottom: 16px;
     font-weight: 700;
+    background: linear-gradient(135deg, #0f172a 0%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .glass-card p {
@@ -241,6 +293,14 @@
     border-radius: 14px;
     padding: 16px;
     transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .service-item:hover {
+    background: rgba(14, 165, 233, 0.1);
+    border-color: rgba(14, 165, 233, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(14, 165, 233, 0.2);
   }
 
   .service-item h4 {
@@ -252,6 +312,7 @@
   .service-item p {
     font-size: 13px;
     margin: 0;
+    color: var(--muted);
   }
 
   /* CAROUSEL FIXED STRUCTURAL RENDERING STYLE */
@@ -271,6 +332,10 @@
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 8px;
+    background: linear-gradient(135deg, #0f172a 0%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .section-header p {
@@ -304,7 +369,7 @@
     padding: 40px;
     gap: 40px;
     align-items: center;
-    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0.6s;
+    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0.7s;
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
@@ -316,15 +381,16 @@
     visibility: visible;
     transform: translateX(0) scale(1);
     position: relative;
+    animation: slide-in-right 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .carousel-slide.prev {
-    transform: translateX(-20%) scale(0.95);
+    transform: translateX(-30%) scale(0.9);
     opacity: 0;
   }
 
   .carousel-slide.next {
-    transform: translateX(20%) scale(0.95);
+    transform: translateX(30%) scale(0.9);
     opacity: 0;
   }
 
@@ -334,13 +400,24 @@
     height: 280px;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    border: 2px solid rgba(14, 165, 233, 0.2);
+    transition: all 0.4s ease;
+  }
+
+  .carousel-slide.active .slide-image {
+    animation: scale-in 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .slide-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .carousel-slide.active .slide-image img {
+    transform: scale(1.05);
   }
 
   .slide-content {
@@ -348,12 +425,21 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    animation: slide-in-right 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s backwards;
+  }
+
+  .carousel-slide.active .slide-content {
+    animation: slide-in-right 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
   }
 
   .slide-content h3 {
     font-size: 26px;
     font-weight: 700;
     margin: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .slide-content p {
@@ -373,10 +459,20 @@
     padding: 6px 12px;
     border-radius: 8px;
     background: rgba(14,165,233,0.1);
-    border: 1px solid rgba(14,165,233,0.2);
+    border: 1px solid rgba(14,165,233,0.3);
     font-size: 12px;
     font-weight: 600;
     color: var(--primary);
+    transition: all 0.3s ease;
+  }
+
+  .carousel-slide.active .tag {
+    animation: fade-in-up 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+  }
+
+  .tag:hover {
+    background: rgba(14,165,233,0.2);
+    border-color: rgba(14,165,233,0.5);
   }
 
   .carousel-controls {
@@ -411,7 +507,9 @@
 
   .carousel-btn:hover {
     background: rgba(14,165,233,0.2);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(14, 165, 233, 0.2);
+    border-color: rgba(14,165,233,0.6);
   }
 
   .carousel-dots {
@@ -428,10 +526,16 @@
     transition: all 0.3s ease;
   }
 
+  .dot:hover {
+    background: rgba(15,23,42,0.4);
+    transform: scale(1.3);
+  }
+
   .dot.active {
     background: var(--primary);
     width: 24px;
     border-radius: 4px;
+    box-shadow: 0 0 15px rgba(14, 165, 233, 0.4);
   }
 
   /* MODAL CONTACT POPUP COMPONENT */
@@ -455,16 +559,17 @@
   }
 
   .modal-card {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     border: 1.5px solid rgba(255, 255, 255, 0.9);
     border-radius: 24px;
     padding: 32px;
     width: 90%;
     max-width: 440px;
-    box-shadow: 0 30px 60px rgba(15, 23, 42, 0.15);
+    box-shadow: 0 30px 80px rgba(15, 23, 42, 0.25);
     transform: translateY(20px) scale(0.95);
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     text-align: center;
+    backdrop-filter: blur(10px);
   }
 
   .modal-overlay.open .modal-card {
@@ -475,7 +580,10 @@
     font-size: 22px;
     font-weight: 700;
     margin-bottom: 8px;
-    color: #0f172a;
+    background: linear-gradient(135deg, #0f172a 0%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .modal-card p {
@@ -505,19 +613,26 @@
   }
 
   .modal-link-btn.email {
-    background: #f1f5f9;
+    background: linear-gradient(135deg, #f1f5f9, #e0e7ff);
     color: #0f172a;
     border: 1px solid #e2e8f0;
   }
 
+  .modal-link-btn.email:hover {
+    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(14, 165, 233, 0.2);
+  }
+
   .modal-link-btn.whatsapp {
-    background: #25d366;
+    background: linear-gradient(135deg, #25d366, #1fa85b);
     color: white;
     box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
   }
 
-  .modal-link-btn:hover {
-    transform: translateY(-2px);
+  .modal-link-btn.whatsapp:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
   }
 
   .close-modal-btn {
@@ -528,6 +643,11 @@
     font-weight: 500;
     cursor: pointer;
     text-decoration: underline;
+    transition: color 0.3s ease;
+  }
+
+  .close-modal-btn:hover {
+    color: #0ea5e9;
   }
 
   .footer-links {
@@ -541,6 +661,12 @@
   .footer-links a {
     color: var(--primary);
     text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .footer-links a:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
   }
 
   footer {
@@ -586,6 +712,7 @@
     .carousel-slide.active {
       display: flex;
       opacity: 1;
+      animation: fade-in-up 0.6s ease forwards;
     }
 
     .slide-image {
@@ -628,7 +755,7 @@
 
       <div class="profile-blend">
         <div class="profile-image">
-          <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=500&q=80&blend=000000&blend-mode=multiply&sat=-100" alt="Henry Amos Profile">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Henry Amos Profile" onerror="this.parentElement.innerHTML='<div class=\"profile-placeholder\">👨‍💻</div>'">
         </div>
       </div>
     </section>
@@ -659,19 +786,19 @@
       <div class="services-grid">
         <div class="service-item">
           <h4>🎨 UI/UX Design</h4>
-          <p>Beautiful, intuitive interfaces</p>
+          <p>Beautiful, intuitive interfaces that delight users</p>
         </div>
         <div class="service-item">
           <h4>⚡ Web Development</h4>
-          <p>Fast, responsive code</p>
+          <p>Fast, responsive code with modern tech stack</p>
         </div>
         <div class="service-item">
           <h4>📱 Mobile Web</h4>
-          <p>Perfect on every device</p>
+          <p>Perfect experience on every device</p>
         </div>
         <div class="service-item">
           <h4>🚀 Performance</h4>
-          <p>Optimized and lightning-fast</p>
+          <p>Optimized and lightning-fast loading times</p>
         </div>
       </div>
     </div>
@@ -679,7 +806,7 @@
     <footer>
       <p>© <strong>Henry Amos</strong> 2026 — Jos, Nigeria. Crafting premium digital experiences.</p>
       <div class="footer-links">
-        <a href="mailto:henryshub4u@gmail.com">📩 henryshub4u@gmail.com</a>
+        <a href="mailto:henryshub4u@gmail.com">📩 Email</a>
         <a href="https://wa.me/2347014608829" target="_blank">💬 WhatsApp</a>
       </div>
     </footer>
@@ -715,6 +842,7 @@
         this.nextBtn = document.getElementById('nextBtn');
         this.dotsContainer = document.getElementById('dotsContainer');
         this.currentIndex = 0;
+        this.autoPlayInterval = null;
 
         this.init();
       }
@@ -724,6 +852,7 @@
         this.createDots();
         this.attachEventListeners();
         this.updateCarousel();
+        this.startAutoPlay();
       }
 
       renderSlides() {
@@ -760,8 +889,14 @@
       }
 
       attachEventListeners() {
-        this.prevBtn.addEventListener('click', () => this.prevSlide());
-        this.nextBtn.addEventListener('click', () => this.nextSlide());
+        this.prevBtn.addEventListener('click', () => {
+          this.prevSlide();
+          this.resetAutoPlay();
+        });
+        this.nextBtn.addEventListener('click', () => {
+          this.nextSlide();
+          this.resetAutoPlay();
+        });
       }
 
       nextSlide() {
@@ -795,6 +930,15 @@
           dot.classList.toggle('active', index === this.currentIndex);
         });
       }
+
+      startAutoPlay() {
+        this.autoPlayInterval = setInterval(() => this.nextSlide(), 6000);
+      }
+
+      resetAutoPlay() {
+        clearInterval(this.autoPlayInterval);
+        this.startAutoPlay();
+      }
     }
 
     // Initialize carousel when DOM is ready
@@ -816,6 +960,13 @@
 
       contactModal.addEventListener('click', (e) => {
         if (e.target === contactModal) {
+          contactModal.classList.remove('open');
+        }
+      });
+
+      // Keyboard shortcut to close modal
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && contactModal.classList.contains('open')) {
           contactModal.classList.remove('open');
         }
       });
