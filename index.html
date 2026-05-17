@@ -162,20 +162,7 @@
     box-shadow: 0 18px 40px rgba(14, 165, 233, 0.4);
   }
 
-  .btn.secondary {
-    background: var(--glass);
-    color: #0f172a;
-    border: 1.5px solid var(--glass-border);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  }
-
-  .btn.secondary:hover {
-    background: var(--glass-strong);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
-  }
-
-  /* Profile picture with artistic blend */
+  /* Profile picture layout */
   .profile-blend {
     position: relative;
     width: 100%;
@@ -190,27 +177,21 @@
     width: 280px;
     height: 280px;
     border-radius: 24px;
-    background: var(--glass);
-    backdrop-filter: blur(20px);
+    background: #1e293b;
     border: 1.5px solid var(--glass-border);
     overflow: hidden;
     box-shadow: 
       0 40px 60px rgba(14, 165, 233, 0.25),
-      0 0 40px rgba(124, 58, 237, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      0 0 40px rgba(124, 58, 237, 0.15);
     animation: scale-in 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
     opacity: 0;
     position: relative;
     z-index: 2;
-    transform-style: preserve-3d;
     transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .profile-image:hover {
-    transform: translateY(-8px) rotateX(5deg) rotateY(-5deg) scale(1.02);
-    box-shadow: 
-      0 50px 80px rgba(14, 165, 233, 0.35),
-      0 0 60px rgba(124, 58, 237, 0.2);
+    transform: translateY(-8px) scale(1.02);
   }
 
   .profile-image img {
@@ -218,10 +199,9 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    background-color: #e2e8f0;
   }
 
-  /* Glassmorphic card */
+  /* Glassmorphic card layouts */
   .glass-card {
     background: var(--glass);
     backdrop-filter: blur(20px) saturate(180%);
@@ -234,22 +214,6 @@
     opacity: 0;
     position: relative;
     overflow: hidden;
-  }
-
-  .glass-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%);
-    pointer-events: none;
-  }
-
-  .glass-card > * {
-    position: relative;
-    z-index: 1;
   }
 
   .glass-card h2 {
@@ -277,13 +241,6 @@
     border-radius: 14px;
     padding: 16px;
     transition: all 0.3s ease;
-    cursor: pointer;
-  }
-
-  .service-item:hover {
-    background: rgba(255,255,255,0.7);
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(14,165,233,0.15);
   }
 
   .service-item h4 {
@@ -297,7 +254,7 @@
     margin: 0;
   }
 
-  /* RE-ENGINEERED 3D CAROUSEL */
+  /* CAROUSEL FIXED STRUCTURAL RENDERING STYLE */
   .carousel-section {
     width: 100%;
     max-width: 1000px;
@@ -328,28 +285,26 @@
     border: 1.5px solid var(--glass-border);
     border-radius: 28px;
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
-    perspective: 1200px;
     overflow: hidden;
   }
 
   .carousel-wrapper {
     width: 100%;
     position: relative;
-    min-height: 480px;
-    display: block;
+    min-height: 420px;
   }
 
   .carousel-slide {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     display: flex;
     padding: 40px;
     gap: 40px;
     align-items: center;
-    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    transform-style: preserve-3d;
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0.6s;
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
@@ -359,52 +314,33 @@
     opacity: 1;
     pointer-events: auto;
     visibility: visible;
-    transform: translateX(0) rotateY(0) scale(1);
-    z-index: 2;
+    transform: translateX(0) scale(1);
+    position: relative;
   }
 
   .carousel-slide.prev {
-    transform: translateX(-100%) rotateY(35deg) translateZ(-200px) scale(0.8);
+    transform: translateX(-20%) scale(0.95);
     opacity: 0;
-    visibility: visible;
   }
 
   .carousel-slide.next {
-    transform: translateX(100%) rotateY(-35deg) translateZ(-200px) scale(0.8);
+    transform: translateX(20%) scale(0.95);
     opacity: 0;
-    visibility: visible;
   }
 
   .slide-image {
     flex: 1;
     width: 100%;
-    height: 100%;
-    max-height: 350px;
+    height: 280px;
     border-radius: 20px;
-    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(124,58,237,0.08));
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
-    position: relative;
-    transform-style: preserve-3d;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-  }
-
-  .carousel-slide.active .slide-image {
-    box-shadow: 
-      0 50px 100px rgba(14,165,233,0.3),
-      0 0 50px rgba(124,58,237,0.2),
-      inset -2px -2px 10px rgba(255,255,255,0.3);
-    transform: translateZ(80px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
   }
 
   .slide-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 20px;
-    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .slide-content {
@@ -412,71 +348,45 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    transform-style: preserve-3d;
-  }
-
-  .carousel-slide.active .slide-content {
-    transform: translateZ(50px);
   }
 
   .slide-content h3 {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
     margin: 0;
-    opacity: 0;
-  }
-
-  .carousel-slide.active .slide-content h3 {
-    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
   }
 
   .slide-content p {
     margin: 0;
     color: var(--muted);
     font-size: 15px;
-    line-height: 1.8;
-    opacity: 0;
-  }
-
-  .carousel-slide.active .slide-content p {
-    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+    line-height: 1.7;
   }
 
   .slide-tags {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    margin-top: 12px;
   }
 
   .tag {
-    display: inline-block;
-    padding: 8px 14px;
+    padding: 6px 12px;
     border-radius: 8px;
-    background: rgba(14,165,233,0.15);
-    border: 1px solid rgba(14,165,233,0.3);
+    background: rgba(14,165,233,0.1);
+    border: 1px solid rgba(14,165,233,0.2);
     font-size: 12px;
     font-weight: 600;
     color: var(--primary);
-    backdrop-filter: blur(10px);
-    opacity: 0;
-  }
-
-  .carousel-slide.active .tag {
-    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
   }
 
   .carousel-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px 30px;
-    background: rgba(255,255,255,0.3);
+    padding: 20px 30px;
+    background: rgba(255,255,255,0.4);
     border-top: 1px solid rgba(255,255,255,0.4);
     border-radius: 0 0 28px 28px;
-    gap: 16px;
-    position: relative;
-    z-index: 10;
   }
 
   .carousel-nav {
@@ -496,45 +406,128 @@
     justify-content: center;
     font-size: 18px;
     color: #0f172a;
-    font-weight: 700;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.3s ease;
   }
 
   .carousel-btn:hover {
     background: rgba(14,165,233,0.2);
-    border-color: rgba(14,165,233,0.5);
-    transform: translateY(-3px) scale(1.1);
-    box-shadow: 0 10px 25px rgba(14,165,233,0.25);
+    transform: translateY(-2px);
   }
 
   .carousel-dots {
     display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex: 1;
+    gap: 8px;
   }
 
   .dot {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: rgba(15,23,42,0.2);
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    border: 2px solid transparent;
-  }
-
-  .dot:hover {
-    background: rgba(15,23,42,0.35);
-    transform: scale(1.2);
+    transition: all 0.3s ease;
   }
 
   .dot.active {
     background: var(--primary);
-    width: 28px;
+    width: 24px;
     border-radius: 4px;
-    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  /* MODAL CONTACT POPUP COMPONENT */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.3);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1.5px solid rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    padding: 32px;
+    width: 90%;
+    max-width: 440px;
+    box-shadow: 0 30px 60px rgba(15, 23, 42, 0.15);
+    transform: translateY(20px) scale(0.95);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-align: center;
+  }
+
+  .modal-overlay.open .modal-card {
+    transform: translateY(0) scale(1);
+  }
+
+  .modal-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #0f172a;
+  }
+
+  .modal-card p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .modal-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .modal-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+  }
+
+  .modal-link-btn.email {
+    background: #f1f5f9;
+    color: #0f172a;
+    border: 1px solid #e2e8f0;
+  }
+
+  .modal-link-btn.whatsapp {
+    background: #25d366;
+    color: white;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+  }
+
+  .modal-link-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .close-modal-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: underline;
   }
 
   .footer-links {
@@ -548,11 +541,6 @@
   .footer-links a {
     color: var(--primary);
     text-decoration: none;
-    transition: color 0.3s ease;
-  }
-
-  .footer-links a:hover {
-    color: var(--accent);
   }
 
   footer {
@@ -566,73 +554,48 @@
     opacity: 0;
   }
 
-  /* STRICT MOBILE OVERRIDES */
+  /* MOBILE RESPONSIVE MEDIA */
   @media (max-width: 768px) {
     .hero-section {
       grid-template-columns: 1fr;
       gap: 32px;
+      text-align: center;
+    }
+
+    .cta-buttons {
+      justify-content: center;
+    }
+
+    .profile-blend {
+      height: 300px;
     }
 
     .carousel-wrapper {
-      min-height: 620px;
+      min-height: auto;
     }
 
     .carousel-slide {
       flex-direction: column;
-      padding: 30px 20px;
+      padding: 24px 16px;
       gap: 20px;
+      position: static;
+      opacity: 0;
+      display: none;
+    }
+
+    .carousel-slide.active {
+      display: flex;
+      opacity: 1;
     }
 
     .slide-image {
-      width: 100%;
-      min-height: 250px;
-      max-height: 250px;
-    }
-
-    .slide-content h3 {
-      font-size: 24px;
+      height: 200px;
     }
 
     .carousel-controls {
       flex-direction: column;
       gap: 16px;
       padding: 20px;
-    }
-
-    .carousel-nav {
-      width: 100%;
-      justify-content: center;
-      order: 2;
-    }
-
-    .carousel-dots {
-      width: 100%;
-      order: 1;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .page {
-      padding: 24px 16px;
-      gap: 32px;
-    }
-
-    .hero-content h1 {
-      font-size: 30px;
-    }
-
-    .carousel-wrapper {
-      min-height: 580px;
-    }
-
-    .slide-image {
-      min-height: 200px;
-      max-height: 200px;
-    }
-
-    .profile-image {
-      width: 240px;
-      height: 240px;
     }
   }
 </style>
@@ -641,20 +604,31 @@
   <div class="blob a"></div>
   <div class="blob b"></div>
 
+  <div class="modal-overlay" id="contactModal">
+    <div class="modal-card">
+      <h3>Let's Build Something Together</h3>
+      <p>Reach out directly through any of the platforms below to kickstart your next project.</p>
+      <div class="modal-links">
+        <a href="mailto:henryshub4u@gmail.com" class="modal-link-btn email">📩 henryshub4u@gmail.com</a>
+        <a href="https://wa.me/2347014608829" target="_blank" class="modal-link-btn whatsapp">💬 WhatsApp: 07014608829</a>
+      </div>
+      <button class="close-modal-btn" id="closeModal">Close Window</button>
+    </div>
+  </div>
+
   <div class="page">
     <section class="hero-section">
       <div class="hero-content">
         <h1>Design-Forward Websites With Premium Craftsmanship</h1>
         <p>I build fast, mobile-first sites and clean landing pages that help businesses and creators stand out. Every pixel is intentional—focusing on clarity, speed, and that premium aesthetic that converts.</p>
         <div class="cta-buttons">
-          <button class="btn primary">Get Started</button>
-          <button class="btn secondary">View My Work</button>
+          <button class="btn primary" id="openModalBtn">Get Started</button>
         </div>
       </div>
 
       <div class="profile-blend">
         <div class="profile-image">
-          <img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=500&q=80" alt="Henry Amos Profile">
+          <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=500&q=80&blend=000000&blend-mode=multiply&sat=-100" alt="Henry Amos Profile">
         </div>
       </div>
     </section>
@@ -706,12 +680,13 @@
       <p>© <strong>Henry Amos</strong> 2026 — Jos, Nigeria. Crafting premium digital experiences.</p>
       <div class="footer-links">
         <a href="mailto:henryshub4u@gmail.com">📩 henryshub4u@gmail.com</a>
-        <a href="https://wa.me/2347014608829" target="_blank">💬 WhatsApp: 07014608829</a>
+        <a href="https://wa.me/2347014608829" target="_blank">💬 WhatsApp</a>
       </div>
     </footer>
   </div>
 
   <script>
+    // Premium CDN production-ready assets to avoid broken images
     const slides = [
       {
         title: "🍰 Local Bakery Landing",
@@ -730,24 +705,6 @@
         image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80",
         description: "High-converting lead capture landing page with email integration, analytics tracking, and conversion optimization.",
         tags: ["Lead Generation", "Analytics", "Conversion Optimized"]
-      },
-      {
-        title: "☕ Specialty Coffee Shop",
-        image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
-        description: "Premium café experience brought online with beautiful imagery, menu showcases, location integration, and reservation systems.",
-        tags: ["F&B", "Reservations", "Premium Design"]
-      },
-      {
-        title: "👗 Fashion & Lifestyle Store",
-        image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80",
-        description: "Modern e-commerce platform with advanced filtering, product recommendations, and seamless checkout experience.",
-        tags: ["E-Commerce", "Shopping Cart", "Responsive"]
-      },
-      {
-        title: "🏂 Winter Sports Marketplace",
-        image: "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=800&q=80",
-        description: "Vibrant e-commerce store for winter sports gear with stunning product visuals, category organization, and rich filtering.",
-        tags: ["E-Commerce", "Seasonal", "Visual Commerce"]
       }
     ];
 
@@ -758,7 +715,6 @@
         this.nextBtn = document.getElementById('nextBtn');
         this.dotsContainer = document.getElementById('dotsContainer');
         this.currentIndex = 0;
-        this.isTransitioning = false;
 
         this.init();
       }
@@ -767,4 +723,63 @@
         this.renderSlides();
         this.createDots();
         this.attachEventListeners();
-        this.upda
+        this.updateCarousel();
+      }
+
+      renderSlides() {
+        this.wrapper.innerHTML = "";
+        slides.forEach(slide => {
+          const slideEl = document.createElement('div');
+          slideEl.className = 'carousel-slide';
+          slideEl.innerHTML = `
+            <div class="slide-image">
+              <img src="${slide.image}" alt="${slide.title}">
+            </div>
+            <div class="slide-content">
+              <h3>${slide.title}</h3>
+              <p>${slide.description}</p>
+              <div class="slide-tags">
+                ${slide.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+              </div>
+            </div>
+          `;
+          this.wrapper.appendChild(slideEl);
+        });
+        this.slides = document.querySelectorAll('.carousel-slide');
+      }
+
+      createDots() {
+        this.dotsContainer.innerHTML = "";
+        slides.forEach((_, index) => {
+          const dot = document.createElement('div');
+          dot.className = `dot ${index === 0 ? 'active' : ''}`;
+          dot.addEventListener('click', () => this.goToSlide(index));
+          this.dotsContainer.appendChild(dot);
+        });
+        this.dots = document.querySelectorAll('.dot');
+      }
+
+      attachEventListeners() {
+        this.prevBtn.addEventListener('click', () => this.prevSlide());
+        this.nextBtn.addEventListener('click', () => this.nextSlide());
+      }
+
+      nextSlide() {
+        this.currentIndex = (this.currentIndex + 1) % slides.length;
+        this.updateCarousel();
+      }
+
+      prevSlide() {
+        this.currentIndex = (this.currentIndex - 1 + slides.length) % slides.length;
+        this.updateCarousel();
+      }
+
+      goToSlide(index) {
+        this.currentIndex = index;
+        this.updateCarousel();
+      }
+
+      updateCarousel() {
+        this.slides.forEach((slide, index) => {
+          slide.classList.remove('active', 'prev', 'next');
+          if (
