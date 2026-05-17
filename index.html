@@ -297,7 +297,7 @@
     margin: 0;
   }
 
-  /* RE-ENGINEERED CAROUSEL CONTAINER FOR MOBILE FIXED HEIGHT */
+  /* RE-ENGINEERED 3D CAROUSEL */
   .carousel-section {
     width: 100%;
     max-width: 1000px;
@@ -335,7 +335,7 @@
   .carousel-wrapper {
     width: 100%;
     position: relative;
-    min-height: 480px; /* Forces a safe minimum height baseline on desktop */
+    min-height: 480px;
     display: block;
   }
 
@@ -537,6 +537,24 @@
     animation: pulse-glow 2s ease-in-out infinite;
   }
 
+  .footer-links {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-weight: 600;
+  }
+
+  .footer-links a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .footer-links a:hover {
+    color: var(--accent);
+  }
+
   footer {
     width: 100%;
     max-width: 1000px;
@@ -548,7 +566,7 @@
     opacity: 0;
   }
 
-  /* RESPONSIVE LAYOUT BREAKPOINTS */
+  /* STRICT MOBILE OVERRIDES */
   @media (max-width: 768px) {
     .hero-section {
       grid-template-columns: 1fr;
@@ -556,7 +574,7 @@
     }
 
     .carousel-wrapper {
-      min-height: 620px; /* Forces enough visual space to avoid absolute container collapsing */
+      min-height: 620px;
     }
 
     .carousel-slide {
@@ -636,7 +654,27 @@
 
       <div class="profile-blend">
         <div class="profile-image">
-          <img src="./profile.jpg" alt="Henry Amos">
+          <img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=500&q=80" alt="Henry Amos Profile">
+        </div>
+      </div>
+    </section>
+
+    <section class="carousel-section">
+      <div class="section-header">
+        <h2>Featured Projects</h2>
+        <p>Explore a diverse range of beautiful, high-converting sites we build</p>
+      </div>
+
+      <div class="carousel-container">
+        <div class="carousel-wrapper" id="carouselWrapper">
+          </div>
+
+        <div class="carousel-controls">
+          <div class="carousel-nav">
+            <button class="carousel-btn" id="prevBtn">←</button>
+            <button class="carousel-btn" id="nextBtn">→</button>
+          </div>
+          <div class="carousel-dots" id="dotsContainer"></div>
         </div>
       </div>
     </section>
@@ -664,33 +702,16 @@
       </div>
     </div>
 
-    <section class="carousel-section">
-      <div class="section-header">
-        <h2>Featured Projects</h2>
-        <p>Explore a diverse range of beautiful, high-converting sites we build</p>
-      </div>
-
-      <div class="carousel-container">
-        <div class="carousel-wrapper" id="carouselWrapper">
-          </div>
-
-        <div class="carousel-controls">
-          <div class="carousel-nav">
-            <button class="carousel-btn" id="prevBtn">←</button>
-            <button class="carousel-btn" id="nextBtn">→</button>
-          </div>
-          <div class="carousel-dots" id="dotsContainer"></div>
-        </div>
-      </div>
-    </section>
-
     <footer>
       <p>© <strong>Henry Amos</strong> 2026 — Jos, Nigeria. Crafting premium digital experiences.</p>
+      <div class="footer-links">
+        <a href="mailto:henryshub4u@gmail.com">📩 henryshub4u@gmail.com</a>
+        <a href="https://wa.me/2347014608829" target="_blank">💬 WhatsApp: 07014608829</a>
+      </div>
     </footer>
   </div>
 
   <script>
-    // Project Carousel Live Data Feeds
     const slides = [
       {
         title: "🍰 Local Bakery Landing",
@@ -746,104 +767,4 @@
         this.renderSlides();
         this.createDots();
         this.attachEventListeners();
-        this.updateCarousel();
-      }
-
-      renderSlides() {
-        slides.forEach(slide => {
-          const slideEl = document.createElement('div');
-          slideEl.className = 'carousel-slide';
-          slideEl.innerHTML = `
-            <div class="slide-image">
-              <img src="${slide.image}" alt="${slide.title}">
-            </div>
-            <div class="slide-content">
-              <h3>${slide.title}</h3>
-              <p>${slide.description}</p>
-              <div class="slide-tags">
-                ${slide.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-              </div>
-            </div>
-          `;
-          this.wrapper.appendChild(slideEl);
-        });
-        this.slides = document.querySelectorAll('.carousel-slide');
-      }
-
-      createDots() {
-        slides.forEach((_, index) => {
-          const dot = document.createElement('div');
-          dot.className = `dot ${index === 0 ? 'active' : ''}`;
-          dot.addEventListener('click', () => this.goToSlide(index));
-          this.dotsContainer.appendChild(dot);
-        });
-        this.dots = document.querySelectorAll('.dot');
-      }
-
-      attachEventListeners() {
-        this.prevBtn.addEventListener('click', () => this.prevSlide());
-        this.nextBtn.addEventListener('click', () => this.nextSlide());
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'ArrowLeft') this.prevSlide();
-          if (e.key === 'ArrowRight') this.nextSlide();
-        });
-      }
-
-      nextSlide() {
-        if (this.isTransitioning) return;
-        this.currentIndex = (this.currentIndex + 1) % slides.length;
-        this.updateCarousel();
-      }
-
-      prevSlide() {
-        if (this.isTransitioning) return;
-        this.currentIndex = (this.currentIndex - 1 + slides.length) % slides.length;
-        this.updateCarousel();
-      }
-
-      goToSlide(index) {
-        if (this.isTransitioning || index === this.currentIndex) return;
-        this.currentIndex = index;
-        this.updateCarousel();
-      }
-
-      updateCarousel() {
-        this.isTransitioning = true;
-
-        this.slides.forEach((slide, index) => {
-          slide.classList.remove('active', 'prev', 'next');
-          if (index === this.currentIndex) {
-            slide.classList.add('active');
-          } else if (index < this.currentIndex) {
-            slide.classList.add('prev');
-          } else {
-            slide.classList.add('next');
-          }
-        });
-
-        this.dots.forEach((dot, index) => {
-          dot.classList.toggle('active', index === this.currentIndex);
-        });
-
-        setTimeout(() => {
-          this.isTransitioning = false;
-        }, 800);
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      new Carousel();
-    });
-
-    // Smooth scroll parallax background effect
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      const blobs = document.querySelectorAll('.blob');
-      blobs.forEach((blob, index) => {
-        const speed = 0.5 + index * 0.1;
-        blob.style.transform = `translateY(${scrollY * speed}px)`;
-      });
-    });
-  </script>
-</body>
-</html>
+        this.upda
